@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-Cultural Character Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            font-weight: 300;
+        }
+
+        .panel {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section h3 {
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 2px;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .option-item {
+            position: relative;
+        }
+
+        .option-item input[type="radio"],
+        .option-item input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .option-item label {
+            display: block;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.85em;
+        }
+
+        .option-item input:checked + label {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .option-item label:hover {
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        .prompt-output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            cursor: pointer;
+            position: relative;
+            min-height: 100px;
+            word-wrap: break-word;
+        }
+
+        .prompt-output:hover::after {
+            content: 'Click to copy';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+
+        .filename-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .filename-section h4 {
+            margin-bottom: 10px;
+            color: #34495e;
+            font-size: 0.95em;
+        }
+
+        .filename-output {
+            background: white;
+            border: 2px solid #e9ecef;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            word-break: break-all;
+            overflow-wrap: break-word;
+        }
+
+        .filename-output:hover {
+            border-color: #667eea;
+        }
+
+        .copy-icon {
+            color: #667eea;
+            flex-shrink: 0;
+        }
+
+        #filename-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #667eea;
+            color: white;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #2ecc71;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            background: #e74c3c;
+        }
+
+        .info-box {
+            background: #e8f4fd;
+            border: 2px solid #bde0f7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+
+        .info-box h4 {
+            color: #2980b9;
+            margin-bottom: 8px;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+            color: #34495e;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Cross-Cultural Character Generator</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="panel">
+            <h2 style="margin-bottom: 25px;">Generate Character</h2>
+            
+            <div class="section">
+                <h3>Age Group</h3>
+                <div class="option-grid">
+                    <div class="option-item">
+                        <input type="radio" name="age" id="age-child" value="child">
+                        <label for="age-child">Child (8-12)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="age" id="age-teen" value="teen">
+                        <label for="age-teen">Teen (13-19)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="age" id="age-young-adult" value="young-adult" checked>
+                        <label for="age-young-adult">Young Adult (20-35)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="age" id="age-middle" value="middle-age">
+                        <label for="age-middle">Middle Age (36-55)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="age" id="age-senior" value="senior">
+                        <label for="age-senior">Senior (56+)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Gender Presentation</h3>
+                <div class="option-grid">
+                    <div class="option-item">
+                        <input type="radio" name="gender" id="gender-masculine" value="masculine">
+                        <label for="gender-masculine">Masculine</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="gender" id="gender-feminine" value="feminine" checked>
+                        <label for="gender-feminine">Feminine</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="gender" id="gender-nonbinary" value="non-binary">
+                        <label for="gender-nonbinary">Non-binary</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Ethnicity/Region</h3>
+                <div class="option-grid">
+                    <div class="option-item">
+                        <input type="radio" name="ethnicity" id="eth-east-asian" value="east-asian">
+                        <label for="eth-east-asian">East Asian</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="ethnicity" id="eth-south-asian" value="south-asian" checked>
+                        <label for="eth-south-asian">South Asian</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="ethnicity" id="eth-middle-eastern" value="middle-eastern">
+                        <label for="eth-middle-eastern">Middle Eastern</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="ethnicity" id="eth-african" value="african">
+                        <label for="eth-african">African</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="ethnicity" id="eth-latin" value="latin-american">
+                        <label for="eth-latin">Latin American</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="ethnicity" id="eth-north-euro" value="northern-european">
+                        <label for="eth-north-euro">Northern European</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="ethnicity" id="eth-south-euro" value="southern-european">
+                        <label for="eth-south-euro">Southern European</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="ethnicity" id="eth-pacific" value="pacific-islander">
+                        <label for="eth-pacific">Pacific Islander</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="ethnicity" id="eth-indigenous" value="indigenous">
+                        <label for="eth-indigenous">Indigenous</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="ethnicity" id="eth-mixed" value="mixed">
+                        <label for="eth-mixed">Mixed Heritage</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Profession/Role</h3>
+                <div class="option-grid">
+                    <div class="option-item">
+                        <input type="radio" name="profession" id="prof-business" value="business" checked>
+                        <label for="prof-business">Business Professional</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="profession" id="prof-healthcare" value="healthcare">
+                        <label for="prof-healthcare">Healthcare Worker</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="profession" id="prof-teacher" value="teacher">
+                        <label for="prof-teacher">Teacher/Educator</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="profession" id="prof-tech" value="tech">
+                        <label for="prof-tech">Tech Worker</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="profession" id="prof-service" value="service">
+                        <label for="prof-service">Service Worker</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="profession" id="prof-student" value="student">
+                        <label for="prof-student">Student</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="profession" id="prof-trades" value="trades">
+                        <label for="prof-trades">Skilled Trades</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="profession" id="prof-creative" value="creative">
+                        <label for="prof-creative">Creative Professional</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="profession" id="prof-scientist" value="scientist">
+                        <label for="prof-scientist">Scientist/Researcher</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="profession" id="prof-farmer" value="farmer">
+                        <label for="prof-farmer">Agricultural Worker</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Additional Diversity (Optional)</h3>
+                <p style="font-size: 0.8em; color: #e74c3c; margin: -10px 0 10px 0; font-style: italic; display: none;" id="diversity-note">
+                    Note: Some items may be automatically excluded if they conflict with professional attire (e.g., turban with hard hat)
+                </p>
+                <div class="option-grid">
+                    <div class="option-item">
+                        <input type="checkbox" id="div-wheelchair" value="wheelchair">
+                        <label for="div-wheelchair">Wheelchair User</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="div-prosthetic" value="prosthetic">
+                        <label for="div-prosthetic">Prosthetic Limb</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="div-glasses" value="glasses">
+                        <label for="div-glasses">Glasses</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="div-cane" value="cane">
+                        <label for="div-cane">Walking Cane</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="div-hijab" value="hijab">
+                        <label for="div-hijab">Hijab</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="div-turban" value="turban">
+                        <label for="div-turban">Turban</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="div-plus-size" value="plus-size">
+                        <label for="div-plus-size">Plus Size</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Expression (Research-Based)</h3>
+                <p style="font-size: 0.85em; color: #7f8c8d; margin: -10px 0 15px 0; font-style: italic;">
+                    Based on Ekman's universal emotions with cultural display rule variations
+                </p>
+                <div class="option-grid">
+                    <div class="option-item">
+                        <input type="radio" name="expression" id="exp-neutral" value="neutral-attentive" checked>
+                        <label for="exp-neutral">Neutral Attentive</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="expression" id="exp-engaged" value="engaged-speaking">
+                        <label for="exp-engaged">Engaged Speaking</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="expression" id="exp-thoughtful" value="thoughtful-processing">
+                        <label for="exp-thoughtful">Thoughtful Processing</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="expression" id="exp-warm" value="warm-encouraging">
+                        <label for="exp-warm">Warm Encouraging</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="expression" id="exp-polite" value="polite-questioning">
+                        <label for="exp-polite">Polite Questioning</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="expression" id="exp-concerned" value="concerned-diplomatic">
+                        <label for="exp-concerned">Concerned Diplomatic</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="expression" id="exp-surprised" value="surprised-interested">
+                        <label for="exp-surprised">Surprised Interested</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="expression" id="exp-focused" value="focused-concentrating">
+                        <label for="exp-focused">Focused Concentrating</label>
+                    </div>
+                </div>
+                
+                <h4 style="margin-top: 20px; margin-bottom: 10px; font-size: 0.95em; color: #34495e;">Expression Intensity</h4>
+                <p style="font-size: 0.85em; color: #7f8c8d; margin: -5px 0 15px 0; font-style: italic;">
+                    Adjust for cultural display rules (e.g., subdued for East Asian contexts, expressive for Latin American)
+                </p>
+                <div class="option-grid">
+                    <div class="option-item">
+                        <input type="radio" name="intensity" id="int-subtle" value="subtle">
+                        <label for="int-subtle">Subtle (Restrained)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="intensity" id="int-moderate" value="moderate" checked>
+                        <label for="int-moderate">Moderate (Balanced)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="intensity" id="int-expressive" value="expressive">
+                        <label for="int-expressive">Expressive (Animated)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Facing Direction</h3>
+                <div class="option-grid">
+                    <div class="option-item">
+                        <input type="radio" name="direction" id="dir-left" value="left" checked>
+                        <label for="dir-left">Facing Left ←</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="direction" id="dir-right" value="right">
+                        <label for="dir-right">Facing Right →</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="direction" id="dir-forward" value="forward">
+                        <label for="dir-forward">Facing Forward ↑</label>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; margin-bottom: 15px;">Generated Prompt</h3>
+            <div class="prompt-output" onclick="copyPrompt()" id="prompt">
+                Select attributes above to generate your Midjourney prompt...
+            </div>
+            
+            <div class="filename-section">
+                <h4>Suggested Filename</h4>
+                <div class="filename-output" onclick="copyFilename()" id="filename">
+                    <span id="filename-text">Select attributes to generate filename...</span>
+                    <span class="copy-icon">📋</span>
+                </div>
+            </div>
+            
+            <button class="btn btn-secondary" onclick="resetForm()">Reset Form</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Message</div>
+
+    <script>
+        // Attribute mappings
+        const attributeMappings = {
+            age: {
+                'child': '10 year old',
+                'teen': '16 year old',
+                'young-adult': '28 year old',
+                'middle-age': '45 year old',
+                'senior': '65 year old'
+            },
+            gender: {
+                'masculine': 'man',
+                'feminine': 'woman',
+                'non-binary': 'non-binary person with androgynous features'
+            },
+            ethnicity: {
+                'east-asian': 'East Asian',
+                'south-asian': 'South Asian',
+                'middle-eastern': 'Middle Eastern',
+                'african': 'Black/African',
+                'latin-american': 'Latin American',
+                'northern-european': 'Northern European',
+                'southern-european': 'Mediterranean',
+                'pacific-islander': 'Pacific Islander',
+                'indigenous': 'Indigenous',
+                'mixed': 'mixed ethnicity'
+            },
+            profession: {
+                'business': 'business professional in formal attire',
+                'healthcare': 'healthcare worker in medical scrubs',
+                'teacher': 'teacher with casual professional attire',
+                'tech': 'tech worker in casual modern clothing',
+                'service': 'service worker in uniform',
+                'student': 'student with backpack and casual clothes',
+                'trades': 'construction worker in safety gear',
+                'creative': 'artist in creative eclectic clothing',
+                'scientist': 'scientist in lab coat',
+                'farmer': 'agricultural worker in practical outdoor clothing'
+            },
+            expression: {
+                'neutral-attentive': 'neutral professional expression with slight engagement, subtle mouth upturn, alert attentive eyes, eyebrows slightly raised showing interest',
+                'engaged-speaking': 'actively speaking with moderate smile, mouth open showing teeth, animated expressive eyes, raised eyebrows, forward head position',
+                'thoughtful-processing': 'contemplative expression with slight smile, eyes looking up and to the side, hand near chin in thinking gesture',
+                'warm-encouraging': 'genuine duchenne smile with crow\'s feet, warm open eyes, relaxed eyebrows, slight head tilt showing empathy',
+                'polite-questioning': 'curious expression with subtle smile, one eyebrow raised higher, head tilted 15 degrees, direct eye contact',
+                'concerned-diplomatic': 'empathetic concern with compressed lips, furrowed brow showing care not anger, forward lean, soft eyes',
+                'surprised-interested': 'positive surprise with open mouth smile, wide eyes, raised eyebrows, hands slightly raised in excitement',
+                'focused-concentrating': 'determined expression with slight smile, narrowed eyes showing focus, lips pressed together, leaning forward'
+            }
+        };
+
+        // Get readable labels
+        const labels = {
+            age: {
+                'child': 'Child',
+                'teen': 'Teen',
+                'young-adult': 'YoungAdult',
+                'middle-age': 'MiddleAge',
+                'senior': 'Senior'
+            },
+            gender: {
+                'masculine': 'Masculine',
+                'feminine': 'Feminine',
+                'non-binary': 'NonBinary'
+            },
+            ethnicity: {
+                'east-asian': 'EastAsian',
+                'south-asian': 'SouthAsian',
+                'middle-eastern': 'MiddleEastern',
+                'african': 'African',
+                'latin-american': 'LatinAmerican',
+                'northern-european': 'NorthernEuropean',
+                'southern-european': 'SouthernEuropean',
+                'pacific-islander': 'PacificIslander',
+                'indigenous': 'Indigenous',
+                'mixed': 'MixedHeritage'
+            },
+            profession: {
+                'business': 'Business',
+                'healthcare': 'Healthcare',
+                'teacher': 'Teacher',
+                'tech': 'Tech',
+                'service': 'Service',
+                'student': 'Student',
+                'trades': 'Trades',
+                'creative': 'Creative',
+                'scientist': 'Scientist',
+                'farmer': 'Agricultural'
+            },
+            expression: {
+                'neutral-attentive': 'Neutral',
+                'engaged-speaking': 'Speaking',
+                'thoughtful-processing': 'Thoughtful',
+                'warm-encouraging': 'Encouraging',
+                'polite-questioning': 'Questioning',
+                'concerned-diplomatic': 'Concerned',
+                'surprised-interested': 'Surprised',
+                'focused-concentrating': 'Focused'
+            },
+            direction: {
+                'left': 'Left',
+                'right': 'Right',
+                'forward': 'Forward'
+            }
+        };
+
+        function getSelectedAttributes() {
+            const age = document.querySelector('input[name="age"]:checked')?.value || '';
+            const gender = document.querySelector('input[name="gender"]:checked')?.value || '';
+            const ethnicity = document.querySelector('input[name="ethnicity"]:checked')?.value || '';
+            const profession = document.querySelector('input[name="profession"]:checked')?.value || '';
+            const expression = document.querySelector('input[name="expression"]:checked')?.value || '';
+            const intensity = document.querySelector('input[name="intensity"]:checked')?.value || 'moderate';
+            const direction = document.querySelector('input[name="direction"]:checked')?.value || 'left';
+            
+            const diversityOptions = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(cb => cb.value);
+
+            return { age, gender, ethnicity, profession, expression, intensity, direction, diversityOptions };
+        }
+
+        function generatePrompt(attrs = null) {
+            const attributes = attrs || getSelectedAttributes();
+            
+            if (!attributes.age || !attributes.gender || !attributes.ethnicity || !attributes.profession) {
+                return 'Please select all required attributes';
+            }
+
+            let prompt = `SINGLE CHARACTER ONLY, flat design vector illustration, NOT cartoon, simple geometric shapes, minimal detail, clean lines, limited color palette, pure white background, full body standing pose, professional business illustration style NOT animated cartoon, `;
+            
+            
+            // Add demographics
+            prompt += `${attributeMappings.age[attributes.age]} ${attributeMappings.ethnicity[attributes.ethnicity]} ${attributeMappings.gender[attributes.gender]}, `;
+            
+            // Add profession
+            prompt += `${attributeMappings.profession[attributes.profession]}, `;
+            
+            // Add diversity options
+            if (attributes.diversityOptions && attributes.diversityOptions.length > 0) {
+                const diversityDescriptions = {
+                    'wheelchair': 'sitting in modern wheelchair',
+                    'prosthetic': 'with visible prosthetic limb',
+                    'glasses': 'wearing glasses',
+                    'cane': 'using walking cane',
+                    'hijab': 'wearing hijab',
+                    'turban': 'wearing turban',
+                    'plus-size': 'with plus-size body type'
+                };
+                
+                // Filter out conflicting items
+                let filteredOptions = attributes.diversityOptions;
+                
+                // If construction worker, remove turban (conflicts with hard hat)
+                if (attributes.profession === 'trades') {
+                    filteredOptions = filteredOptions.filter(opt => opt !== 'turban');
+                }
+                
+                // If healthcare worker, remove hijab/turban (conflicts with medical cap requirements)
+                if (attributes.profession === 'healthcare') {
+                    filteredOptions = filteredOptions.filter(opt => opt !== 'turban' && opt !== 'hijab');
+                }
+                
+                if (filteredOptions.length > 0) {
+                    const diversityText = filteredOptions
+                        .map(opt => diversityDescriptions[opt])
+                        .join(', ');
+                    prompt += `${diversityText}, `;
+                }
+            }
+            
+            // Add expression with intensity modifier
+            const intensityModifiers = {
+                'subtle': 'subtle restrained ',
+                'moderate': '',
+                'expressive': 'highly expressive energetic '
+            };
+            
+            const expressionWithIntensity = intensityModifiers[attributes.intensity] + attributeMappings.expression[attributes.expression];
+            
+            // Add expression and direction with improved instructions
+            if (attributes.direction === 'forward') {
+                prompt += `character standing at slight angle facing mostly forward, shoulders square to viewer, ${expressionWithIntensity}, making direct eye contact with viewer/camera, engaging posture, `;
+            } else {
+                // Better three-quarter view instructions
+                const directionDetails = {
+                    'left': 'body at 30-45 degree angle facing left, NOT profile view, shoulders visible at angle, head turned slightly more left, gaze directed left toward invisible conversation partner',
+                    'right': 'body at 30-45 degree angle facing right, NOT profile view, shoulders visible at angle, head turned slightly more right, gaze directed right toward invisible conversation partner'
+                };
+                prompt += `THREE-QUARTER ANGLE VIEW not side profile: ${directionDetails[attributes.direction]}, ${expressionWithIntensity}, engaged in conversation with someone off-frame, natural standing pose, `;
+            }
+            
+            // Add isolation instructions
+            prompt += `corporate flat design style, geometric simplified features, NOT photorealistic, NOT 3D rendered, isolated character on white background, no other people in image, `;
+            prompt += `--seed 1580775571 --v 6 --style raw`;
+
+            return prompt;
+        }
+
+        function generateFilename(attrs = null) {
+            const attributes = attrs || getSelectedAttributes();
+            
+            if (!attributes.age || !attributes.gender || !attributes.ethnicity || !attributes.profession) {
+                return 'Select attributes to generate filename...';
+            }
+
+            // Build filename parts
+            let parts = [];
+            
+            // Add descriptive parts
+            parts.push(labels.age[attributes.age]);
+            parts.push(labels.gender[attributes.gender]);
+            parts.push(labels.ethnicity[attributes.ethnicity]);
+            parts.push(labels.profession[attributes.profession]);
+            
+            // Expression
+            if (attributes.expression) {
+                parts.push(labels.expression[attributes.expression]);
+            }
+            
+            // Direction
+            parts.push('Facing' + labels.direction[attributes.direction]);
+            
+            // Diversity options
+            if (attributes.diversityOptions && attributes.diversityOptions.length > 0) {
+                const diversityLabels = {
+                    'wheelchair': 'Wheelchair',
+                    'prosthetic': 'Prosthetic',
+                    'glasses': 'Glasses',
+                    'cane': 'Cane',
+                    'hijab': 'Hijab',
+                    'turban': 'Turban',
+                    'plus-size': 'PlusSize'
+                };
+                
+                attributes.diversityOptions.forEach(opt => {
+                    if (diversityLabels[opt]) {
+                        parts.push(diversityLabels[opt]);
+                    }
+                });
+            }
+            
+            // Join with underscores
+            return parts.join('_').replace(/\s+/g, '');
+        }
+
+        function updatePrompt() {
+            const prompt = generatePrompt();
+            document.getElementById('prompt').textContent = prompt;
+            
+            const filename = generateFilename();
+            document.getElementById('filename-text').textContent = filename;
+            
+            // Show/hide diversity note based on profession
+            const profession = document.querySelector('input[name="profession"]:checked')?.value;
+            const diversityNote = document.getElementById('diversity-note');
+            if (profession === 'trades' || profession === 'healthcare') {
+                diversityNote.style.display = 'block';
+            } else {
+                diversityNote.style.display = 'none';
+            }
+        }
+
+        function copyPrompt() {
+            const prompt = document.getElementById('prompt').textContent;
+            if (prompt !== 'Please select all required attributes' && prompt !== 'Select attributes above to generate your Midjourney prompt...') {
+                navigator.clipboard.writeText(prompt).then(() => {
+                    showToast('Prompt copied to clipboard!');
+                }).catch(err => {
+                    // Fallback for browsers that don't support clipboard API
+                    const textArea = document.createElement("textarea");
+                    textArea.value = prompt;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showToast('Prompt copied to clipboard!');
+                });
+            }
+        }
+
+        function copyFilename() {
+            const filename = document.getElementById('filename-text').textContent;
+            if (filename !== 'Select attributes to generate filename...') {
+                navigator.clipboard.writeText(filename).then(() => {
+                    showToast('Filename copied to clipboard!');
+                }).catch(err => {
+                    // Fallback for browsers that don't support clipboard API
+                    const textArea = document.createElement("textarea");
+                    textArea.value = filename;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showToast('Filename copied to clipboard!');
+                });
+            }
+        }
+
+        function resetForm() {
+            // Reset to defaults
+            document.querySelector('input[name="age"][value="young-adult"]').checked = true;
+            document.querySelector('input[name="gender"][value="feminine"]').checked = true;
+            document.querySelector('input[name="ethnicity"][value="south-asian"]').checked = true;
+            document.querySelector('input[name="profession"][value="business"]').checked = true;
+            document.querySelector('input[name="expression"][value="neutral-attentive"]').checked = true;
+            document.querySelector('input[name="intensity"][value="moderate"]').checked = true;
+            document.querySelector('input[name="direction"][value="left"]').checked = true;
+            
+            // Clear checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            
+            updatePrompt();
+            showToast('Form reset to defaults');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast show';
+            if (type === 'error') toast.classList.add('error');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Add event listeners
+        document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
+            input.addEventListener('change', updatePrompt);
+        });
+
+        // Initialize
+        updatePrompt();
+    </script>
+</body>
+</html>
