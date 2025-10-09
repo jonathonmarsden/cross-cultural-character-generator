@@ -11,40 +11,242 @@
             box-sizing: border-box;
         }
 
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f5f7fa;
-            color: #2c3e50;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
             line-height: 1.6;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
 
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px 0;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: white;
+            color: #0f172a;
+            padding: 48px 0;
+            margin-bottom: 32px;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         h1 {
             text-align: center;
-            font-size: 2em;
-            font-weight: 300;
+            font-size: 2.5em;
+            font-weight: 600;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+
+        .header-subtitle {
+            text-align: center;
+            color: #64748b;
+            font-size: 1.1em;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .panel {
             background: white;
-            padding: 30px;
+            padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
-            max-width: 900px;
-            margin: 0 auto;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .panel h2 {
+            color: #0f172a;
+            font-size: 1.5em;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-bottom: 32px;
+        }
+
+        .name-input-section {
+            margin-bottom: 25px;
+        }
+
+        .name-input-section input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .name-input-section input[type="text"]:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .saved-characters-panel {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            height: fit-content;
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
+        }
+
+        .search-box {
+            margin-bottom: 24px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .character-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+
+        .character-card:hover {
+            border-color: #6366f1;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+        }
+
+        .character-card h4 {
+            margin: 0 0 12px 0;
+            color: #0f172a;
+            font-size: 1.05em;
+            font-weight: 600;
+        }
+
+        .character-card .character-meta {
+            font-size: 0.875em;
+            color: #64748b;
+            margin-bottom: 6px;
+            line-height: 1.5;
+        }
+
+        .character-card .character-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .character-card .btn-small {
+            padding: 8px 16px;
+            font-size: 0.875em;
+            font-weight: 500;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .character-card .btn-load {
+            background: #6366f1;
+            color: white;
+            flex: 1;
+        }
+
+        .character-card .btn-load:hover {
+            background: #4f46e5;
+        }
+
+        .character-card .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+
+        .character-card .btn-delete:hover {
+            background: #dc2626;
+        }
+
+        .export-import-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .export-import-section h4 {
+            color: #0f172a;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .export-import-section .btn-small {
+            width: 100%;
+            margin-bottom: 12px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-export {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn-export:hover {
+            background: #4f46e5;
+        }
+
+        .btn-import {
+            background: #64748b;
+            color: white;
+        }
+
+        .btn-import:hover {
+            background: #475569;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 64px 32px;
+            color: #94a3b8;
+        }
+
+        .empty-state p {
+            margin-top: 12px;
+            font-size: 0.95em;
+            line-height: 1.6;
         }
 
         .section {
@@ -52,20 +254,10 @@
         }
 
         .section h3 {
-            margin-bottom: 15px;
-            color: #34495e;
-            font-size: 1.1em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section h3::before {
-            content: '';
-            width: 4px;
-            height: 20px;
-            background: #667eea;
-            border-radius: 2px;
+            margin-bottom: 16px;
+            color: #0f172a;
+            font-size: 1em;
+            font-weight: 600;
         }
 
         .option-grid {
@@ -86,144 +278,157 @@
 
         .option-item label {
             display: block;
-            padding: 8px 12px;
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 6px;
+            padding: 10px 14px;
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             text-align: center;
-            font-size: 0.85em;
+            font-size: 0.875em;
+            font-weight: 500;
         }
 
         .option-item input:checked + label {
-            background: #667eea;
+            background: #6366f1;
             color: white;
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         .option-item label:hover {
-            border-color: #667eea;
-            transform: translateY(-1px);
+            border-color: #6366f1;
         }
 
         .prompt-output {
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 20px;
-            border-radius: 8px;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 24px;
+            border-radius: 10px;
             font-family: 'Courier New', monospace;
-            font-size: 0.85em;
-            line-height: 1.6;
-            margin-bottom: 20px;
+            font-size: 0.875em;
+            line-height: 1.7;
+            margin-bottom: 24px;
             cursor: pointer;
             position: relative;
-            min-height: 100px;
+            min-height: 120px;
             word-wrap: break-word;
+            border: 1px solid #1e293b;
         }
 
         .prompt-output:hover::after {
             content: 'Click to copy';
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255,255,255,0.2);
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 0.8em;
+            top: 12px;
+            right: 12px;
+            background: #334155;
+            color: #e2e8f0;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            font-family: 'Inter', sans-serif;
         }
 
         .filename-section {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            border: 1px solid #e2e8f0;
         }
 
         .filename-section h4 {
-            margin-bottom: 10px;
-            color: #34495e;
+            margin-bottom: 12px;
+            color: #0f172a;
             font-size: 0.95em;
+            font-weight: 600;
         }
 
         .filename-output {
             background: white;
-            border: 2px solid #e9ecef;
-            padding: 10px;
-            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            padding: 12px 16px;
+            border-radius: 8px;
             font-family: 'Courier New', monospace;
-            font-size: 0.85em;
+            font-size: 0.875em;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
+            gap: 12px;
             word-break: break-all;
             overflow-wrap: break-word;
+            transition: all 0.2s ease;
         }
 
         .filename-output:hover {
-            border-color: #667eea;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         .copy-icon {
-            color: #667eea;
+            color: #6366f1;
             flex-shrink: 0;
+            font-size: 1.2em;
         }
 
         #filename-text {
             flex: 1;
             min-width: 0;
+            color: #0f172a;
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 14px 24px;
             border: none;
-            border-radius: 6px;
-            font-size: 0.95em;
-            font-weight: 600;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: #667eea;
+            transition: all 0.2s ease;
+            background: #6366f1;
             color: white;
             width: 100%;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            background: #4f46e5;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
         }
 
         .btn:disabled {
-            background: #95a5a6;
+            background: #cbd5e1;
             cursor: not-allowed;
-            transform: none;
         }
 
         .btn-secondary {
-            background: #95a5a6;
-            margin-top: 10px;
+            background: #f8fafc;
+            color: #64748b;
+            border: 1px solid #cbd5e1;
+            margin-top: 12px;
         }
 
         .btn-secondary:hover {
-            background: #7f8c8d;
+            background: #f1f5f9;
+            color: #475569;
+            box-shadow: none;
         }
 
         .toast {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #2ecc71;
+            bottom: 32px;
+            right: 32px;
+            background: #0f172a;
             color: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            padding: 16px 24px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             transform: translateY(100px);
             opacity: 0;
             transition: all 0.3s ease;
             z-index: 1000;
+            font-weight: 500;
+            border: 1px solid #1e293b;
         }
 
         .toast.show {
@@ -232,30 +437,33 @@
         }
 
         .toast.error {
-            background: #e74c3c;
+            background: #ef4444;
+            border-color: #dc2626;
         }
 
         .info-box {
-            background: #e8f4fd;
-            border: 2px solid #bde0f7;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 24px;
             font-size: 0.9em;
         }
 
         .info-box h4 {
-            color: #2980b9;
-            margin-bottom: 8px;
+            color: #1e40af;
+            margin-bottom: 10px;
+            font-weight: 600;
         }
 
         .info-box ul {
             margin-left: 20px;
-            color: #34495e;
+            color: #475569;
         }
 
         .info-box li {
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -263,14 +471,21 @@
     <header>
         <div class="container">
             <h1>Cross-Cultural Character Generator</h1>
+            <p class="header-subtitle">Create diverse, culturally-aware character illustrations for training materials</p>
         </div>
     </header>
 
     <div class="container">
-        <div class="panel">
-            <h2 style="margin-bottom: 25px;">Generate Character</h2>
-            
-            <div class="section">
+        <div class="main-layout">
+            <div class="panel">
+                <h2 style="margin-bottom: 25px;">Generate Character</h2>
+
+                <div class="name-input-section">
+                    <h3>Character Name</h3>
+                    <input type="text" id="character-name" placeholder="Enter character name (e.g., Maria Rodriguez, John Smith)">
+                </div>
+
+                <div class="section">
                 <h3>Age Group</h3>
                 <div class="option-grid">
                     <div class="option-item">
@@ -534,7 +749,26 @@
                 </div>
             </div>
             
+            <button class="btn" id="save-character-btn" onclick="saveCharacter()">Save Character</button>
             <button class="btn btn-secondary" onclick="resetForm()">Reset Form</button>
+            </div>
+
+            <div class="saved-characters-panel">
+                <h2 style="margin-bottom: 20px;">Saved Characters</h2>
+
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Search characters..." oninput="filterCharacters()">
+                </div>
+
+                <div id="characters-list"></div>
+
+                <div class="export-import-section">
+                    <h4 style="margin-bottom: 15px; color: #34495e;">Backup & Share</h4>
+                    <button class="btn-small btn-export" onclick="exportCharacters()">Export All Characters</button>
+                    <button class="btn-small btn-import" onclick="document.getElementById('import-file').click()">Import Characters</button>
+                    <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importCharacters(event)">
+                </div>
+            </div>
         </div>
     </div>
 
@@ -866,6 +1100,228 @@
             }, 3000);
         }
 
+        // LocalStorage Functions
+        const STORAGE_KEY = 'cross-cultural-characters';
+
+        function loadCharactersFromStorage() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function saveCharactersToStorage(characters) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(characters));
+        }
+
+        function saveCharacter() {
+            const name = document.getElementById('character-name').value.trim();
+
+            if (!name) {
+                showToast('Please enter a character name', 'error');
+                return;
+            }
+
+            const attributes = getSelectedAttributes();
+
+            if (!attributes.age || !attributes.gender || !attributes.ethnicity || !attributes.profession) {
+                showToast('Please select all required attributes', 'error');
+                return;
+            }
+
+            const character = {
+                id: Date.now(),
+                name: name,
+                attributes: attributes,
+                prompt: generatePrompt(attributes),
+                filename: generateFilename(attributes),
+                createdAt: new Date().toISOString()
+            };
+
+            const characters = loadCharactersFromStorage();
+            characters.unshift(character); // Add to beginning
+            saveCharactersToStorage(characters);
+
+            renderCharactersList();
+            showToast(`Character "${name}" saved!`);
+
+            // Clear name field
+            document.getElementById('character-name').value = '';
+        }
+
+        function deleteCharacter(id) {
+            if (!confirm('Are you sure you want to delete this character?')) {
+                return;
+            }
+
+            let characters = loadCharactersFromStorage();
+            characters = characters.filter(c => c.id !== id);
+            saveCharactersToStorage(characters);
+
+            renderCharactersList();
+            showToast('Character deleted');
+        }
+
+        function loadCharacter(id) {
+            const characters = loadCharactersFromStorage();
+            const character = characters.find(c => c.id === id);
+
+            if (!character) {
+                showToast('Character not found', 'error');
+                return;
+            }
+
+            // Set name
+            document.getElementById('character-name').value = character.name;
+
+            // Set attributes
+            const attrs = character.attributes;
+
+            if (attrs.age) document.querySelector(`input[name="age"][value="${attrs.age}"]`).checked = true;
+            if (attrs.gender) document.querySelector(`input[name="gender"][value="${attrs.gender}"]`).checked = true;
+            if (attrs.ethnicity) document.querySelector(`input[name="ethnicity"][value="${attrs.ethnicity}"]`).checked = true;
+            if (attrs.profession) document.querySelector(`input[name="profession"][value="${attrs.profession}"]`).checked = true;
+            if (attrs.expression) document.querySelector(`input[name="expression"][value="${attrs.expression}"]`).checked = true;
+            if (attrs.intensity) document.querySelector(`input[name="intensity"][value="${attrs.intensity}"]`).checked = true;
+            if (attrs.direction) document.querySelector(`input[name="direction"][value="${attrs.direction}"]`).checked = true;
+
+            // Clear all checkboxes first
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+
+            // Set diversity options
+            if (attrs.diversityOptions && attrs.diversityOptions.length > 0) {
+                attrs.diversityOptions.forEach(opt => {
+                    const checkbox = document.querySelector(`input[type="checkbox"][value="${opt}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+
+            updatePrompt();
+            showToast(`Loaded character "${character.name}"`);
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderCharactersList(filter = '') {
+            const characters = loadCharactersFromStorage();
+            const listEl = document.getElementById('characters-list');
+
+            if (characters.length === 0) {
+                listEl.innerHTML = `
+                    <div class="empty-state">
+                        <p>No saved characters yet.<br>Create and save your first character!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Filter characters
+            const filtered = filter
+                ? characters.filter(c => {
+                    const searchText = filter.toLowerCase();
+                    return c.name.toLowerCase().includes(searchText) ||
+                           c.filename.toLowerCase().includes(searchText) ||
+                           Object.values(c.attributes).some(v =>
+                               String(v).toLowerCase().includes(searchText)
+                           );
+                  })
+                : characters;
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `
+                    <div class="empty-state">
+                        <p>No characters found matching "${filter}"</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = filtered.map(char => `
+                <div class="character-card">
+                    <h4>${escapeHtml(char.name)}</h4>
+                    <div class="character-meta">
+                        ${labels.age[char.attributes.age]} •
+                        ${labels.gender[char.attributes.gender]} •
+                        ${labels.ethnicity[char.attributes.ethnicity]}
+                    </div>
+                    <div class="character-meta">
+                        ${labels.profession[char.attributes.profession]} •
+                        ${labels.expression[char.attributes.expression]}
+                    </div>
+                    <div class="character-actions">
+                        <button class="btn-small btn-load" onclick="loadCharacter(${char.id})">Load</button>
+                        <button class="btn-small btn-delete" onclick="deleteCharacter(${char.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterCharacters() {
+            const searchTerm = document.getElementById('search-input').value.trim();
+            renderCharactersList(searchTerm);
+        }
+
+        function exportCharacters() {
+            const characters = loadCharactersFromStorage();
+
+            if (characters.length === 0) {
+                showToast('No characters to export', 'error');
+                return;
+            }
+
+            const dataStr = JSON.stringify(characters, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `characters_export_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+
+            showToast(`Exported ${characters.length} character(s)`);
+        }
+
+        function importCharacters(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+
+                    if (!Array.isArray(imported)) {
+                        showToast('Invalid file format', 'error');
+                        return;
+                    }
+
+                    const existing = loadCharactersFromStorage();
+
+                    // Merge, avoiding duplicates by ID
+                    const existingIds = new Set(existing.map(c => c.id));
+                    const newCharacters = imported.filter(c => !existingIds.has(c.id));
+
+                    const merged = [...existing, ...newCharacters];
+                    saveCharactersToStorage(merged);
+
+                    renderCharactersList();
+                    showToast(`Imported ${newCharacters.length} new character(s)`);
+
+                } catch (err) {
+                    showToast('Error reading file', 'error');
+                    console.error(err);
+                }
+            };
+            reader.readAsText(file);
+
+            // Reset file input
+            event.target.value = '';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         // Add event listeners
         document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
             input.addEventListener('change', updatePrompt);
@@ -873,6 +1329,7 @@
 
         // Initialize
         updatePrompt();
+        renderCharactersList();
     </script>
 </body>
 </html>

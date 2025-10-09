@@ -1,6 +1,6 @@
 # Cross-Cultural Character Generator
 
-A web-based tool for generating diverse character prompts for Midjourney, specifically designed for creating cross-cultural training materials.
+A web-based tool for generating diverse character prompts for Midjourney, specifically designed for creating cross-cultural training materials to help people better understand each other across cultural boundaries.
 
 ## Features
 
@@ -32,6 +32,7 @@ A web-based tool for generating diverse character prompts for Midjourney, specif
 ## Prompt Structure
 
 All generated prompts follow this structure:
+
 - Consistent art style (flat vector illustration)
 - Demographic details
 - Professional attire
@@ -42,6 +43,7 @@ All generated prompts follow this structure:
 ## Creating Conversation Scenes
 
 To create characters that appear to be conversing:
+
 1. Generate Character A facing right →
 2. Generate Character B facing left ←
 3. Place them on opposite sides of your slide
